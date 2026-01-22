@@ -2,7 +2,9 @@
 
 [![Tests](../../actions/workflows/tests.yml/badge.svg)](../../actions/workflows/tests.yml)
 
-Учебный проект для портфолио AQA на Python: тестирование API-клиента на `httpx`, валидация данных через `pydantic`, отчёты `Allure`, запуск тестов в CI через GitHub Actions.
+> В процессе работы использовал ChatGPT как помощника для структуры проекта, рефакторинга и оформления. 
+> Тестовые сценарии, проверки и логика тестов (позитивные/негативные кейсы, MockTransport, валидация схемы) — выбраны и реализованы мной.
+
 
 ## What’s inside
 - ✅ API client (`httpx.Client`) + context manager (`with ApiClient() as api`)
