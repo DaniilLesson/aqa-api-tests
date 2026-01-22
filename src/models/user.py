@@ -2,5 +2,7 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
-    id: int
-    name: str
+    #Модель пользователя (контракт данных).
+
+    id: int         
+    name: str       
