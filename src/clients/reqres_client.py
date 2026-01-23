@@ -2,7 +2,7 @@ import allure
 import httpx
 
 from src.config import BASE_URL, TIMEOUT_S
-from src.models.user import User
+from src.models.user import UserData, UserResponse
 
 
 class ApiClient:
@@ -12,12 +12,11 @@ class ApiClient:
         timeout_s: float = TIMEOUT_S,
         transport: httpx.BaseTransport | None = None,
     ):
-
         self._client = httpx.Client(
-            base_url=base_url,      #базовый адрес API
-            timeout=timeout_s,      #таймаут на запросы (в секундах)
-            transport=transport,    #позволяет подменять сетевой слой (например, MockTransport в unit-тестах)
-            )
+            base_url=base_url,  # базовый адрес API
+            timeout=timeout_s,  # таймаут на запросы (в секундах)
+            transport=transport,  # позволяет подменять сетевой слой (MockTransport)
+        )
 
     def close(self) -> None:
         self._client.close()
@@ -30,8 +29,7 @@ class ApiClient:
 
     @allure.step("GET /users/{user_id}")
     def get_user_raw(self, user_id: int) -> httpx.Response:
-        #Делаем запрос и возвращаем httpx.Response.
-
+        # Делаем запрос и возвращаем httpx.Response.
         r = self._client.get(f"/users/{user_id}")
 
         allure.attach(
@@ -42,9 +40,9 @@ class ApiClient:
         return r
 
     @allure.step("Parse response to User model")
-    def get_user(self, user_id: int) -> User:
+    def get_user(self, user_id: int) -> UserData:
         """
-        Делает запрос и возвращает Pydantic-модель User.
+        Делает запрос и возвращает Pydantic-модель UserData.
 
         1) получаем Response
         2) если статус 4xx/5xx — выбрасываем исключение (raise_for_status)
@@ -55,6 +53,6 @@ class ApiClient:
         # (в негативных тестах проверяем через pytest.raises).
         r.raise_for_status()
 
-       
-        return User.model_validate(r.json())
-
+        # Валидация полного ответа по контракту, затем возвращаем data как доменную сущность.
+        payload = UserResponse.model_validate(r.json())
+        return payload.data
