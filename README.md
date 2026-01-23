@@ -1,20 +1,21 @@
-# AQA API Tests (pytest + httpx + pydantic + allure)
+# AQA API Tests — портфолио автотестера
 
 [![Tests](../../actions/workflows/tests.yml/badge.svg)](../../actions/workflows/tests.yml)
 
-> В процессе работы использовал ChatGPT как помощника для структуры проекта, рефакторинга и оформления. 
-> Тестовые сценарии, проверки и логика тестов (позитивные/негативные кейсы, MockTransport, валидация схемы) — выбраны и реализованы мной.
+Коротко: небольшой, но аккуратный проект, который показывает подход к тестированию REST API.  
+Основной фокус — структура клиента, тестовая матрица (позитив/негатив), контрактная валидация и стабильные unit-тесты без сети.
+ 
+> Тестовые сценарии, проверки и логика тестов (MockTransport, негативные кейсы, валидация схемы) — выбраны и реализованы мной.
 
+## Что здесь демонстрируется
+- API-клиент на `httpx` с управлением таймаутом и контекстным менеджером
+- Валидация контракта ответа через Pydantic (модели совпадают с `reqres.in`)
+- Unit-тесты через `MockTransport` — без интернета, быстро и стабильно
+- Негативные кейсы: 404 и некорректная схема данных
+- Генерация Allure-результатов
+- CI: запуск `pytest` на push/PR
 
-## What’s inside
-- ✅ API client (`httpx.Client`) + context manager (`with ApiClient() as api`)
-- ✅ Pydantic-модели для валидации ответов
-- ✅ Unit-тесты (MockTransport) — не зависят от сети и всегда стабильны
-- ✅ Negative-тесты (404/ошибки) + проверки `raise_for_status()`
-- ✅ Allure-results генерация для отчётов
-- ✅ CI: GitHub Actions (pytest on push / PR)
-
-## Stack
+## Стек
 - Python 3.12
 - pytest
 - httpx
@@ -22,20 +23,37 @@
 - allure-pytest
 - GitHub Actions
 
-## Project structure
-- `src/` — API client + models
+## Структура проекта
+- `src/` — API-клиент + модели
   - `src/clients/reqres_client.py`
   - `src/models/user.py`
   - `src/config.py`
-- `tests/` — unit/negative tests + fixtures
+- `tests/` — unit/negative тесты + фикстуры
   - `tests/conftest.py`
   - `tests/test_users_unit.py`
   - `tests/test_users_negative.py`
 - `.github/workflows/tests.yml` — CI workflow
 
-## Setup (Windows)
+## Быстрый старт (Windows)
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+pytest -q
+```
+
+## Быстрый старт (macOS/Linux)
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+pytest -q
+```
+
+## Allure отчёты
+```bash
+pytest --alluredir=allure-results
+allure serve allure-results
+```
