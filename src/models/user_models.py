@@ -20,5 +20,4 @@ class Support(BaseModel):
 class UserResponse(BaseModel):
     # Структура ответа reqres.in для GET /users/{id}.
     data: UserData
-    # Поле support не всегда нужно в тестах, но описано для полноты контракта.
     support: Support | None = None

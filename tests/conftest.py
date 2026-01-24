@@ -21,7 +21,6 @@ def api_mock():
                         "avatar": "https://example.com/avatar.png",
                     },
                     "support": {"url": "https://example.com", "text": "Support info"},
-                    # Поддерживаем реальную структуру ответа, чтобы тесты были ближе к продакшен-контракту.
                 },
             )
 
